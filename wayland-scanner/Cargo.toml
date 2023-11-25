@@ -12,12 +12,12 @@ edition = "2018"
 rust-version = "1.59"
 readme = "README.md"
 
-[lib]
-proc-macro = true
+# [lib]
+# proc-macro = true
 
 [dependencies]
-proc-macro2 = "1.0.11"
-quote = "1.0"
+# proc-macro2 = "1.0.11"
+# quote = "1.0"
 quick-xml = "0.28"
 
 [dev-dependencies]

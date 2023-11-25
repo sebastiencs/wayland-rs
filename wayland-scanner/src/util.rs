@@ -1,16 +1,16 @@
-use proc_macro2::{Ident, Span, TokenStream};
-use quote::{quote, ToTokens};
+// use proc_macro2::{Ident, Span, TokenStream};
+// use quote::{quote, ToTokens};
 
-pub(crate) fn to_doc_attr(text: &str) -> TokenStream {
-    let text = text.lines().map(str::trim).collect::<Vec<_>>().join("\n");
-    let text = text.trim();
+// pub(crate) fn to_doc_attr(text: &str) -> TokenStream {
+//     let text = text.lines().map(str::trim).collect::<Vec<_>>().join("\n");
+//     let text = text.trim();
 
-    quote!(#[doc = #text])
-}
+//     quote!(#[doc = #text])
+// }
 
-pub(crate) fn description_to_doc_attr((short, long): &(String, String)) -> TokenStream {
-    to_doc_attr(&format!("{}\n\n{}", short, long))
-}
+// pub(crate) fn description_to_doc_attr((short, long): &(String, String)) -> TokenStream {
+//     to_doc_attr(&format!("{}\n\n{}", short, long))
+// }
 
 pub fn is_keyword(txt: &str) -> bool {
     matches!(
@@ -99,17 +99,17 @@ pub fn snake_to_camel(input: &str) -> String {
     }
 }
 
-pub fn dotted_to_relname(input: &str) -> TokenStream {
-    let mut it = input.split('.');
-    match (it.next(), it.next()) {
-        (Some(module), Some(name)) => {
-            let module = Ident::new(module, Span::call_site());
-            let ident = Ident::new(&snake_to_camel(name), Span::call_site());
-            quote::quote!(super::#module::#ident)
-        }
-        (Some(name), None) => {
-            Ident::new(&snake_to_camel(name), Span::call_site()).into_token_stream()
-        }
-        _ => unreachable!(),
-    }
-}
+// pub fn dotted_to_relname(input: &str) -> TokenStream {
+//     let mut it = input.split('.');
+//     match (it.next(), it.next()) {
+//         (Some(module), Some(name)) => {
+//             let module = Ident::new(module, Span::call_site());
+//             let ident = Ident::new(&snake_to_camel(name), Span::call_site());
+//             quote::quote!(super::#module::#ident)
+//         }
+//         (Some(name), None) => {
+//             Ident::new(&snake_to_camel(name), Span::call_site()).into_token_stream()
+//         }
+//         _ => unreachable!(),
+//     }
+// }
