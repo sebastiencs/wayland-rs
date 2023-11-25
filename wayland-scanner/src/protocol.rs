@@ -1,5 +1,5 @@
-use proc_macro2::TokenStream;
-use quote::quote;
+// use proc_macro2::TokenStream;
+// use quote::quote;
 
 #[derive(Clone, Debug)]
 pub struct Protocol {
@@ -138,17 +138,17 @@ impl Type {
         matches!(self, Type::String | Type::Object)
     }
 
-    pub fn common_type(self) -> TokenStream {
-        match self {
-            Type::Int => quote!(Int),
-            Type::Uint => quote!(Uint),
-            Type::Fixed => quote!(Fixed),
-            Type::Array => quote!(Array),
-            Type::Fd => quote!(Fd),
-            Type::String => quote!(Str),
-            Type::Object => quote!(Object),
-            Type::NewId => quote!(NewId),
-            Type::Destructor => panic!("Destructor is not a valid argument type."),
-        }
-    }
+    // pub fn common_type(self) -> TokenStream {
+    //     match self {
+    //         Type::Int => quote!(Int),
+    //         Type::Uint => quote!(Uint),
+    //         Type::Fixed => quote!(Fixed),
+    //         Type::Array => quote!(Array),
+    //         Type::Fd => quote!(Fd),
+    //         Type::String => quote!(Str),
+    //         Type::Object => quote!(Object),
+    //         Type::NewId => quote!(NewId),
+    //         Type::Destructor => panic!("Destructor is not a valid argument type."),
+    //     }
+    // }
 }
