@@ -201,16 +201,22 @@ fn parse_description<R: BufRead>(reader: &mut Reader<R>, attrs: Attributes) -> (
     (summary, description)
 }
 
-fn parse_request<R: BufRead>(reader: &mut Reader<R>, attrs: Attributes) -> Message {
-    let mut request = Message::new();
+fn init_message_from_attrs(attrs: Attributes) -> Message {
+    let mut msg = Message::new();
     for attr in attrs.filter_map(|res| res.ok()) {
         match attr.key.into_inner() {
-            b"name" => request.name = decode_utf8_or_panic(attr.value.into_owned()),
-            b"type" => request.typ = Some(parse_type(&attr.value)),
-            b"since" => request.since = parse_or_panic(&attr.value),
+            b"name" => msg.name = decode_utf8_or_panic(attr.value.into_owned()),
+            b"type" => msg.typ = Some(parse_type(&attr.value)),
+            b"since" => msg.since = parse_or_panic(&attr.value),
+            b"version" => msg.version = Some(parse_or_panic(&attr.value)),
             _ => {}
         }
     }
+    msg
+}
+
+fn parse_request<R: BufRead>(reader: &mut Reader<R>, attrs: Attributes) -> Message {
+    let mut request = init_message_from_attrs(attrs);
 
     loop {
         match reader.read_event_into(&mut Vec::new()) {
@@ -262,15 +268,7 @@ fn parse_enum<R: BufRead>(reader: &mut Reader<R>, attrs: Attributes) -> Enum {
 }
 
 fn parse_event<R: BufRead>(reader: &mut Reader<R>, attrs: Attributes) -> Message {
-    let mut event = Message::new();
-    for attr in attrs.filter_map(|res| res.ok()) {
-        match attr.key.into_inner() {
-            b"name" => event.name = decode_utf8_or_panic(attr.value.into_owned()),
-            b"type" => event.typ = Some(parse_type(&attr.value)),
-            b"since" => event.since = parse_or_panic(&attr.value),
-            _ => {}
-        }
-    }
+    let mut event = init_message_from_attrs(attrs);
 
     loop {
         match reader.read_event_into(&mut Vec::new()) {

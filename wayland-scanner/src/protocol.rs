@@ -43,13 +43,27 @@ pub struct Message {
     pub name: String,
     pub typ: Option<Type>,
     pub since: u32,
+    /// Non-standard XML `version` attribute on `<request>` / `<event>` (e.g. some Hyprland protocols).
+    pub version: Option<u32>,
     pub description: Option<(String, String)>,
     pub args: Vec<Arg>,
 }
 
 impl Message {
     pub fn new() -> Message {
-        Message { name: String::new(), typ: None, since: 1, description: None, args: Vec::new() }
+        Message {
+            name: String::new(),
+            typ: None,
+            since: 1,
+            version: None,
+            description: None,
+            args: Vec::new(),
+        }
+    }
+
+    /// Minimum interface version at which this message is defined (combines XML `since` and `version`).
+    pub fn effective_introduced_version(&self) -> u32 {
+        self.version.map(|v| self.since.max(v)).unwrap_or(self.since)
     }
 
     pub fn all_null(&self) -> bool {
